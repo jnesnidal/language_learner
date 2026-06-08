@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      name="description"
+      content="Learn Hindi letters with progressive multiple-choice flashcards."
+    >
+    <title>Akshara | Learn Hindi Letters</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="styles.css?v=20260608-family-info">
+    <script src="app.js?v=20260608-family-info" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="site-header">
+        <a class="brand" href="#" aria-label="Akshara home">
+          <span class="brand-mark" aria-hidden="true">अ</span>
+          <span>
+            <strong>Akshara</strong>
+            <small>Hindi letters, one step at a time</small>
+          </span>
+        </a>
+
+        <nav class="main-nav" aria-label="Main navigation">
+          <button class="nav-button active" data-view="learn" type="button">
+            Learn
+          </button>
+          <button class="nav-button" data-view="progress" type="button">
+            Progress
+          </button>
+        </nav>
+      </header>
+
+      <main>
+        <section id="learn-view" class="view active" aria-labelledby="learn-heading">
+          <div class="learn-layout">
+            <aside class="journey-panel">
+              <p class="eyebrow">Your journey</p>
+              <h1 id="learn-heading">Build your alphabet</h1>
+              <p class="journey-copy">
+                Start with a handful of letters. Master them to unlock the next
+                set.
+              </p>
+
+              <div class="overall-progress">
+                <div class="progress-heading">
+                  <span>Alphabet progress</span>
+                  <strong id="overall-progress-label">0 / 57</strong>
+                </div>
+                <div
+                  class="progress-track"
+                  role="progressbar"
+                  aria-label="Alphabet mastery"
+                  aria-valuemin="0"
+                  aria-valuemax="57"
+                  aria-valuenow="0"
+                >
+                  <span id="overall-progress-bar"></span>
+                </div>
+              </div>
+
+              <div id="stage-list" class="stage-list" aria-label="Learning stages"></div>
+            </aside>
+
+            <section class="practice-panel" aria-label="Multiple choice practice">
+              <div class="practice-toolbar">
+                <div>
+                  <p id="practice-mode-label" class="eyebrow">Multiple choice</p>
+                  <h2 id="stage-title">First steps</h2>
+                </div>
+                <div class="streak-pill" title="Current correct-answer streak">
+                  <span aria-hidden="true">◆</span>
+                  <strong id="session-streak">0</strong>
+                  <span>streak</span>
+                </div>
+              </div>
+
+              <div class="flashcard-wrap">
+                <article id="flashcard" class="flashcard" aria-live="polite">
+                  <p id="card-prompt" class="card-prompt">
+                    Which sound does this letter make?
+                  </p>
+                  <div id="question-letter" class="question-letter" lang="hi">अ</div>
+                  <button
+                    id="speak-question"
+                    class="speak-button"
+                    type="button"
+                    aria-label="Hear this letter pronounced"
+                  >
+                    <svg
+                      class="speaker-icon"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d="M4 9v6h4l5 4V5L8 9H4Z"></path>
+                      <path d="M16 9.5a4 4 0 0 1 0 5"></path>
+                      <path d="M18.5 7a7 7 0 0 1 0 10"></path>
+                    </svg>
+                    Hear pronunciation
+                  </button>
+                  <p id="speech-status" class="speech-status" aria-live="polite"></p>
+                  <p id="question-family" class="question-family">Vowel</p>
+                  <div class="card-divider"></div>
+                  <div id="answer-options" class="answer-options"></div>
+                  <div id="feedback" class="feedback" aria-live="assertive"></div>
+                  <button id="next-button" class="next-button" type="button" hidden>
+                    Next letter
+                    <span aria-hidden="true">→</span>
+                  </button>
+                </article>
+              </div>
+
+              <p id="keyboard-hint" class="keyboard-hint">
+                Tip: use keys <kbd>1</kbd>–<kbd>4</kbd> to answer and
+                <kbd>Enter</kbd> to continue.
+              </p>
+            </section>
+          </div>
+        </section>
+
+        <section
+          id="progress-view"
+          class="view"
+          aria-labelledby="progress-heading"
+          hidden
+        >
+          <div class="progress-page-heading">
+            <div>
+              <p class="eyebrow">Letter by letter</p>
+              <h1 id="progress-heading">Your progress</h1>
+              <p>See what is strong and what needs another look.</p>
+            </div>
+            <button id="reset-progress" class="text-button" type="button">
+              Reset progress
+            </button>
+          </div>
+
+          <div class="summary-grid">
+            <article class="summary-card">
+              <span>Mastered</span>
+              <strong id="mastered-count">0</strong>
+              <small id="mastered-total">of 57 items</small>
+            </article>
+            <article class="summary-card">
+              <span>Accuracy</span>
+              <strong id="accuracy-value">—</strong>
+              <small>across all answers</small>
+            </article>
+            <article class="summary-card">
+              <span>Best streak</span>
+              <strong id="best-streak">0</strong>
+              <small>correct in a row</small>
+            </article>
+          </div>
+
+          <div id="letter-progress-groups" class="progress-sections"></div>
+        </section>
+      </main>
+
+      <footer class="app-settings" aria-label="Display settings">
+        <label class="settings-switch">
+          <span>
+            <strong>Synesthesia mode</strong>
+            <small>Give every letter a consistent color.</small>
+          </span>
+          <input id="synesthesia-toggle" type="checkbox" role="switch">
+          <span class="switch-track" aria-hidden="true"></span>
+        </label>
+      </footer>
+    </div>
+
+    <dialog id="unlock-dialog" class="unlock-dialog">
+      <div class="unlock-icon" aria-hidden="true">अ</div>
+      <p class="eyebrow">Stage unlocked</p>
+      <h2 id="unlock-title">A new set is ready</h2>
+      <p id="unlock-copy">You have added more letters to your practice deck.</p>
+      <button id="unlock-close" class="next-button" type="button">
+        Keep learning
+      </button>
+    </dialog>
+  </body>
+</html>
