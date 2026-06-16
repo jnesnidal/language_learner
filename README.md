@@ -1,4 +1,4 @@
-# Akshara
+# Language Learning App
 
 A static prototype for learning Hindi Devanagari letters through progressive
 multiple-choice flashcards.
