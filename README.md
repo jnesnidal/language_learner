@@ -3,6 +3,14 @@
 A static prototype for learning Hindi Devanagari letters through progressive
 multiple-choice flashcards.
 
+<img width="1917" height="907" alt="Screenshot 2026-06-15 231918" src="https://github.com/user-attachments/assets/10a1eba7-ea6e-47fd-a3cb-479fe0374b25" />
+<img width="1902" height="911" alt="Screenshot 2026-06-15 231901" src="https://github.com/user-attachments/assets/5b04cf22-5940-490f-a665-77304a1a85b9" />
+<img width="1252" height="905" alt="Screenshot 2026-06-15 231139" src="https://github.com/user-attachments/assets/ddbba7f1-9bc0-4cec-a2f4-465feb54cbc4" />
+<img width="862" height="792" alt="Screenshot 2026-06-15 232037" src="https://github.com/user-attachments/assets/25afdbef-8896-4d1a-a111-339287b8f155" />
+<img width="869" height="787" alt="Screenshot 2026-06-15 231955" src="https://github.com/user-attachments/assets/3ae8322c-78aa-47b7-8f82-50ca42576a9a" />
+<img width="436" height="903" alt="Screenshot 2026-06-15 231943" src="https://github.com/user-attachments/assets/51af03d2-42de-47de-8a53-1b8b1ff5920f" />
+
+
 ## Run locally
 
 Open `index.html` directly in a browser, or serve the directory with any static
