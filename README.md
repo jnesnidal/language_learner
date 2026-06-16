@@ -1,7 +1,7 @@
 # Akshara
 
-A dependency-free prototype for learning Hindi Devanagari letters through
-progressive multiple-choice flashcards.
+A static prototype for learning Hindi Devanagari letters through progressive
+multiple-choice flashcards.
 
 ## Run locally
 
@@ -19,11 +19,13 @@ Then visit `http://localhost:8000`.
 - Introduces 46 foundational letters plus the inherent `a` form and 10 vowel
   mātrā forms across ten stages.
 - Uses IAST romanization.
-- Pronounces letters with the browser's Hindi (`hi-IN`) speech synthesis voice.
-- Standardizes audio on a canonical Devanagari speech value, even when the
-  visible answer is romanized IAST.
-- Wraps isolated letters in short repeated Hindi pronunciation prompts so
-  browser voices do not interpret them as standalone symbols.
+- Defines a canonical IPA target for every vowel, consonant, and generated
+  mātrā form, and shows that target when pronunciation plays.
+- Uses Meta's Hindi MMS/VITS text-to-speech model through Transformers.js,
+  passing the canonical Devanagari text directly. The quantized model downloads
+  and is cached on first use.
+- Falls back to the browser's Hindi (`hi-IN`) speech synthesis voice when the
+  neural model cannot load, including when `index.html` is opened via `file://`.
 - Labels vowel and consonant families in lessons and progress rows, with
   hover/focus phonetics explanations for each consonant family.
 - Includes a persistent Synesthesia Mode that assigns high-contrast accent
@@ -38,10 +40,12 @@ Then visit `http://localhost:8000`.
   times.
 - Begins mixing consonant mātrā forms into practice as each consonant improves:
   three forms at 50% mastery, six at 75%, and all ten at 100%. These forms have
-  their own progress records but do not block core lesson advancement.
+  their own progress records but do not block core lesson advancement. The
+  cluster-only Hindi consonants `ङ` and `ञ` do not generate standalone mātrā
+  syllables.
 - Typed answers accept diacritics directly or English-keyboard shortcuts such as
-  `aa` for `ā`, `.t` for `ṭ`, `ng` for `ṅ`, `ny` for `ñ`, `sh` for `ś`, and
-  `.s` for `ṣ`.
+  `aa` for `ā`, `.t` for `ṭ`, `ny` for `ñ`, `sh` for `ś`, and `.s` for `ṣ`.
+- Uses `ng` rather than `ṅ` for the velar nasal's learner-facing romanization.
 - The inherent final `a` is optional when typing a consonant with no explicit
   vowel sign, so both `ka` and `k` are accepted for `क`.
 - Unlocks each new stage after all letters in the current stage reach at least

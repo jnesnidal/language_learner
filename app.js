@@ -29,7 +29,7 @@ const LETTERS = [
   { id: "kha", char: "ख", roman: "kha", family: "Velar consonant", stage: 3 },
   { id: "ga", char: "ग", roman: "ga", family: "Velar consonant", stage: 3 },
   { id: "gha", char: "घ", roman: "gha", family: "Velar consonant", stage: 3 },
-  { id: "nga", char: "ङ", roman: "ṅa", family: "Velar consonant", stage: 3 },
+  { id: "nga", char: "ङ", roman: "nga", family: "Velar consonant", stage: 3 },
 
   { id: "ca", char: "च", roman: "ca", family: "Palatal consonant", stage: 4 },
   { id: "cha", char: "छ", roman: "cha", family: "Palatal consonant", stage: 4 },
@@ -136,78 +136,79 @@ const MASTERY_ACCURACY = 0.75;
 const BLACKOUT_ATTEMPTS = 8;
 const BLACKOUT_ACCURACY = 0.9;
 const DERIVED_MATRA_CHANCE = 0.35;
+const CLUSTER_ONLY_CONSONANT_IDS = new Set(["nga", "nya"]);
 
 const DERIVED_MATRAS = [
-  { id: "aa", sign: "\u093e", vowel: "\u0101" },
-  { id: "i", sign: "\u093f", vowel: "i" },
-  { id: "ii", sign: "\u0940", vowel: "\u012b" },
-  { id: "u", sign: "\u0941", vowel: "u" },
-  { id: "uu", sign: "\u0942", vowel: "\u016b" },
-  { id: "r", sign: "\u0943", vowel: "\u1e5b" },
-  { id: "e", sign: "\u0947", vowel: "e" },
-  { id: "ai", sign: "\u0948", vowel: "ai" },
-  { id: "o", sign: "\u094b", vowel: "o" },
-  { id: "au", sign: "\u094c", vowel: "au" },
+  { id: "aa", sign: "\u093e", vowel: "\u0101", ipaVowel: "a\u02d0" },
+  { id: "i", sign: "\u093f", vowel: "i", ipaVowel: "\u026a" },
+  { id: "ii", sign: "\u0940", vowel: "\u012b", ipaVowel: "i\u02d0" },
+  { id: "u", sign: "\u0941", vowel: "u", ipaVowel: "\u028a" },
+  { id: "uu", sign: "\u0942", vowel: "\u016b", ipaVowel: "u\u02d0" },
+  { id: "r", sign: "\u0943", vowel: "\u1e5b", ipaVowel: "r\u026a" },
+  { id: "e", sign: "\u0947", vowel: "e", ipaVowel: "e\u02d0" },
+  { id: "ai", sign: "\u0948", vowel: "ai", ipaVowel: "\u025b\u02d0" },
+  { id: "o", sign: "\u094b", vowel: "o", ipaVowel: "o\u02d0" },
+  { id: "au", sign: "\u094c", vowel: "au", ipaVowel: "\u0254\u02d0" },
 ];
 
 const LETTER_DISPLAY = {
-  a: { char: "\u0905", roman: "a" },
-  aa: { char: "\u0906", roman: "\u0101" },
-  i: { char: "\u0907", roman: "i" },
-  ii: { char: "\u0908", roman: "\u012b" },
-  u: { char: "\u0909", roman: "u" },
-  uu: { char: "\u090a", roman: "\u016b" },
-  "r-vowel": { char: "\u090b", roman: "\u1e5b" },
-  e: { char: "\u090f", roman: "e" },
-  ai: { char: "\u0910", roman: "ai" },
-  o: { char: "\u0913", roman: "o" },
-  au: { char: "\u0914", roman: "au" },
-  anusvara: { char: "\u0905\u0902", roman: "a\u1e43" },
-  visarga: { char: "\u0905\u0903", roman: "a\u1e25" },
-  "matra-a": { char: "\u0915", roman: "ka" },
-  "matra-aa": { char: "\u0915\u093e", roman: "k\u0101" },
-  "matra-i": { char: "\u0915\u093f", roman: "ki" },
-  "matra-ii": { char: "\u0915\u0940", roman: "k\u012b" },
-  "matra-u": { char: "\u0915\u0941", roman: "ku" },
-  "matra-uu": { char: "\u0915\u0942", roman: "k\u016b" },
-  "matra-r": { char: "\u0915\u0943", roman: "k\u1e5b" },
-  "matra-e": { char: "\u0915\u0947", roman: "ke" },
-  "matra-ai": { char: "\u0915\u0948", roman: "kai" },
-  "matra-o": { char: "\u0915\u094b", roman: "ko" },
-  "matra-au": { char: "\u0915\u094c", roman: "kau" },
-  ka: { char: "\u0915", roman: "ka" },
-  kha: { char: "\u0916", roman: "kha" },
-  ga: { char: "\u0917", roman: "ga" },
-  gha: { char: "\u0918", roman: "gha" },
-  nga: { char: "\u0919", roman: "\u1e45a" },
-  ca: { char: "\u091a", roman: "ca" },
-  cha: { char: "\u091b", roman: "cha" },
-  ja: { char: "\u091c", roman: "ja" },
-  jha: { char: "\u091d", roman: "jha" },
-  nya: { char: "\u091e", roman: "\u00f1a" },
-  tta: { char: "\u091f", roman: "\u1e6da" },
-  ttha: { char: "\u0920", roman: "\u1e6dha" },
-  dda: { char: "\u0921", roman: "\u1e0da" },
-  ddha: { char: "\u0922", roman: "\u1e0dha" },
-  nna: { char: "\u0923", roman: "\u1e47a" },
-  ta: { char: "\u0924", roman: "ta" },
-  tha: { char: "\u0925", roman: "tha" },
-  da: { char: "\u0926", roman: "da" },
-  dha: { char: "\u0927", roman: "dha" },
-  na: { char: "\u0928", roman: "na" },
-  pa: { char: "\u092a", roman: "pa" },
-  pha: { char: "\u092b", roman: "pha" },
-  ba: { char: "\u092c", roman: "ba" },
-  bha: { char: "\u092d", roman: "bha" },
-  ma: { char: "\u092e", roman: "ma" },
-  ya: { char: "\u092f", roman: "ya" },
-  ra: { char: "\u0930", roman: "ra" },
-  la: { char: "\u0932", roman: "la" },
-  va: { char: "\u0935", roman: "va" },
-  sha: { char: "\u0936", roman: "\u015ba" },
-  ssa: { char: "\u0937", roman: "\u1e63a" },
-  sa: { char: "\u0938", roman: "sa" },
-  ha: { char: "\u0939", roman: "ha" },
+  a: { char: "\u0905", roman: "a", ipa: "\u0259" },
+  aa: { char: "\u0906", roman: "\u0101", ipa: "a\u02d0" },
+  i: { char: "\u0907", roman: "i", ipa: "\u026a" },
+  ii: { char: "\u0908", roman: "\u012b", ipa: "i\u02d0" },
+  u: { char: "\u0909", roman: "u", ipa: "\u028a" },
+  uu: { char: "\u090a", roman: "\u016b", ipa: "u\u02d0" },
+  "r-vowel": { char: "\u090b", roman: "\u1e5b", ipa: "r\u026a" },
+  e: { char: "\u090f", roman: "e", ipa: "e\u02d0" },
+  ai: { char: "\u0910", roman: "ai", ipa: "\u025b\u02d0" },
+  o: { char: "\u0913", roman: "o", ipa: "o\u02d0" },
+  au: { char: "\u0914", roman: "au", ipa: "\u0254\u02d0" },
+  anusvara: { char: "\u0905\u0902", roman: "a\u1e43", ipa: "\u0259\u0303" },
+  visarga: { char: "\u0905\u0903", roman: "a\u1e25", ipa: "\u0259h" },
+  "matra-a": { char: "\u0915", roman: "ka", ipa: "k\u0259" },
+  "matra-aa": { char: "\u0915\u093e", roman: "k\u0101", ipa: "ka\u02d0" },
+  "matra-i": { char: "\u0915\u093f", roman: "ki", ipa: "k\u026a" },
+  "matra-ii": { char: "\u0915\u0940", roman: "k\u012b", ipa: "ki\u02d0" },
+  "matra-u": { char: "\u0915\u0941", roman: "ku", ipa: "k\u028a" },
+  "matra-uu": { char: "\u0915\u0942", roman: "k\u016b", ipa: "ku\u02d0" },
+  "matra-r": { char: "\u0915\u0943", roman: "k\u1e5b", ipa: "kr\u026a" },
+  "matra-e": { char: "\u0915\u0947", roman: "ke", ipa: "ke\u02d0" },
+  "matra-ai": { char: "\u0915\u0948", roman: "kai", ipa: "k\u025b\u02d0" },
+  "matra-o": { char: "\u0915\u094b", roman: "ko", ipa: "ko\u02d0" },
+  "matra-au": { char: "\u0915\u094c", roman: "kau", ipa: "k\u0254\u02d0" },
+  ka: { char: "\u0915", roman: "ka", ipa: "k\u0259" },
+  kha: { char: "\u0916", roman: "kha", ipa: "k\u02b0\u0259" },
+  ga: { char: "\u0917", roman: "ga", ipa: "\u0261\u0259" },
+  gha: { char: "\u0918", roman: "gha", ipa: "\u0261\u02b1\u0259" },
+  nga: { char: "\u0919", roman: "nga", ipa: "\u014b\u0259" },
+  ca: { char: "\u091a", roman: "ca", ipa: "t\u0361\u0283\u0259" },
+  cha: { char: "\u091b", roman: "cha", ipa: "t\u0361\u0283\u02b0\u0259" },
+  ja: { char: "\u091c", roman: "ja", ipa: "d\u0361\u0292\u0259" },
+  jha: { char: "\u091d", roman: "jha", ipa: "d\u0361\u0292\u02b1\u0259" },
+  nya: { char: "\u091e", roman: "\u00f1a", ipa: "\u0272\u0259" },
+  tta: { char: "\u091f", roman: "\u1e6da", ipa: "\u0288\u0259" },
+  ttha: { char: "\u0920", roman: "\u1e6dha", ipa: "\u0288\u02b0\u0259" },
+  dda: { char: "\u0921", roman: "\u1e0da", ipa: "\u0256\u0259" },
+  ddha: { char: "\u0922", roman: "\u1e0dha", ipa: "\u0256\u02b1\u0259" },
+  nna: { char: "\u0923", roman: "\u1e47a", ipa: "\u0273\u0259" },
+  ta: { char: "\u0924", roman: "ta", ipa: "t\u032a\u0259" },
+  tha: { char: "\u0925", roman: "tha", ipa: "t\u032a\u02b0\u0259" },
+  da: { char: "\u0926", roman: "da", ipa: "d\u032a\u0259" },
+  dha: { char: "\u0927", roman: "dha", ipa: "d\u032a\u02b1\u0259" },
+  na: { char: "\u0928", roman: "na", ipa: "n\u032a\u0259" },
+  pa: { char: "\u092a", roman: "pa", ipa: "p\u0259" },
+  pha: { char: "\u092b", roman: "pha", ipa: "p\u02b0\u0259" },
+  ba: { char: "\u092c", roman: "ba", ipa: "b\u0259" },
+  bha: { char: "\u092d", roman: "bha", ipa: "b\u02b1\u0259" },
+  ma: { char: "\u092e", roman: "ma", ipa: "m\u0259" },
+  ya: { char: "\u092f", roman: "ya", ipa: "j\u0259" },
+  ra: { char: "\u0930", roman: "ra", ipa: "r\u0259" },
+  la: { char: "\u0932", roman: "la", ipa: "l\u0259" },
+  va: { char: "\u0935", roman: "va", ipa: "\u028b\u0259" },
+  sha: { char: "\u0936", roman: "\u015ba", ipa: "\u0283\u0259" },
+  ssa: { char: "\u0937", roman: "\u1e63a", ipa: "\u0282\u0259" },
+  sa: { char: "\u0938", roman: "sa", ipa: "s\u0259" },
+  ha: { char: "\u0939", roman: "ha", ipa: "\u0266\u0259" },
 };
 
 const elements = {
@@ -249,9 +250,13 @@ let currentOptions = [];
 let answered = false;
 let lastLetterId = null;
 let hindiVoice = null;
+let hindiTts = null;
+let hindiTtsReadyPromise = null;
+let activeSpeechPlayback = null;
+let speechRequestId = 0;
 let currentMode = "choice";
 
-const IAST_KEYS = ["ā", "ī", "ū", "ṛ", "ṅ", "ñ", "ṭ", "ḍ", "ṇ", "ś", "ṣ", "ṃ", "ḥ"];
+const IAST_KEYS = ["ā", "ī", "ū", "ṛ", "ñ", "ṭ", "ḍ", "ṇ", "ś", "ṣ", "ṃ", "ḥ"];
 const SYNESTHESIA_COLORS = [
   "#e6194b",
   "#f58231",
@@ -272,6 +277,64 @@ const SPEAKER_ICON_SVG = `
     <path d="M18.5 7a7 7 0 0 1 0 10"></path>
   </svg>
 `;
+function initializeHindiTts() {
+  if (hindiTtsReadyPromise) return hindiTtsReadyPromise;
+
+  hindiTtsReadyPromise = (async () => {
+    if (location.protocol === "file:") return false;
+
+    const { pipeline } = await import(
+      "./vendor/transformers/transformers.min.js"
+    );
+    hindiTts = await pipeline(
+      "text-to-speech",
+      "Xenova/mms-tts-hin",
+      {
+        quantized: true,
+      },
+    );
+    return true;
+  })().catch((error) => {
+    console.error("Hindi MMS TTS failed to load:", error);
+    hindiTts = null;
+    return false;
+  });
+
+  return hindiTtsReadyPromise;
+}
+
+function stopSpeechPlayback() {
+  activeSpeechPlayback?.stop();
+  activeSpeechPlayback?.context?.close();
+  activeSpeechPlayback = null;
+  window.speechSynthesis?.cancel();
+}
+
+function playAudioData(audioData, sampleRate = 24000) {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContext) return null;
+
+  const context = new AudioContext();
+  const buffer = context.createBuffer(1, audioData.length, sampleRate);
+  buffer.getChannelData(0).set(audioData);
+
+  const source = context.createBufferSource();
+  source.buffer = buffer;
+  source.connect(context.destination);
+  source.start();
+
+  return {
+    context,
+    source,
+    stop() {
+      try {
+        source.stop();
+      } catch {
+        // Playback already ended.
+      }
+    },
+  };
+}
 
 function loadHindiVoice() {
   if (!("speechSynthesis" in window)) return null;
@@ -284,17 +347,23 @@ function loadHindiVoice() {
   return hindiVoice;
 }
 
-function speakHindi(letter, button = null) {
+function speakWithBrowserFallback(
+  letter,
+  button,
+  { ipaStatus = "", revealIpa = false } = {},
+) {
   if (!("speechSynthesis" in window)) {
-    elements.speechStatus.textContent =
-      "Speech playback is not supported in this browser.";
+    button?.classList.remove("speaking");
+    if (revealIpa) {
+      elements.speechStatus.textContent =
+        `${ipaStatus} Speech playback is not supported in this browser.`.trim();
+    }
     return;
   }
 
   const text = speechPromptFor(letter);
   if (!text) return;
 
-  window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "hi-IN";
   utterance.rate = letter.family === "Vowel" ? 0.62 : 0.68;
@@ -303,18 +372,70 @@ function speakHindi(letter, button = null) {
   utterance.voice = hindiVoice ?? loadHindiVoice();
 
   if (button) button.classList.add("speaking");
-  elements.speechStatus.textContent = utterance.voice
-    ? ""
-    : "Using your browser's default Hindi pronunciation.";
+  if (revealIpa) {
+    elements.speechStatus.textContent =
+      `${ipaStatus} Using browser speech fallback.`.trim();
+  }
 
   utterance.onend = () => button?.classList.remove("speaking");
   utterance.onerror = () => {
     button?.classList.remove("speaking");
-    elements.speechStatus.textContent =
-      "No Hindi voice is installed in this browser.";
+    if (revealIpa) {
+      elements.speechStatus.textContent =
+        `${ipaStatus} No Hindi voice is installed in this browser.`.trim();
+    }
   };
 
   window.speechSynthesis.speak(utterance);
+}
+
+async function speakHindi(letter, button = null, { revealIpa = false } = {}) {
+  const ipa = letterIpa(letter);
+  const ipaStatus = revealIpa && ipa ? `IPA target: /${ipa}/.` : "";
+  const text = letterSpeech(letter);
+  const requestId = ++speechRequestId;
+
+  stopSpeechPlayback();
+  button?.classList.add("speaking");
+  if (revealIpa) {
+    elements.speechStatus.textContent =
+      `${ipaStatus} Loading Hindi voice...`.trim();
+  }
+
+  const ready = text && (await initializeHindiTts());
+  if (requestId !== speechRequestId) return;
+
+  if (!ready) {
+    speakWithBrowserFallback(letter, button, { ipaStatus, revealIpa });
+    return;
+  }
+
+  try {
+    const result = await hindiTts(text);
+    if (requestId !== speechRequestId) return;
+
+    const audioData = result.audio;
+    const sampleRate = result.sampling_rate;
+    activeSpeechPlayback = playAudioData(audioData, sampleRate);
+    if (!activeSpeechPlayback) {
+      speakWithBrowserFallback(letter, button, { ipaStatus, revealIpa });
+      return;
+    }
+
+    if (revealIpa) elements.speechStatus.textContent = ipaStatus;
+    activeSpeechPlayback.source.onended = () => {
+      if (requestId === speechRequestId) {
+        button?.classList.remove("speaking");
+        activeSpeechPlayback?.context?.close();
+        activeSpeechPlayback = null;
+      }
+    };
+  } catch (error) {
+    console.error("Hindi MMS synthesis failed:", error);
+    if (requestId === speechRequestId) {
+      speakWithBrowserFallback(letter, button, { ipaStatus, revealIpa });
+    }
+  }
 }
 
 function autoSpeakIfNew(letter) {
@@ -357,6 +478,11 @@ function letterDisplay(letter) {
       validDisplayValue(letter?.romanization) ||
       validDisplayValue(letter?.iast) ||
       validDisplayValue(letter?.iAst),
+    ipa:
+      validDisplayValue(canonical.ipa) ||
+      validDisplayValue(letter?.ipa) ||
+      validDisplayValue(letter?.phoneme) ||
+      validDisplayValue(letter?.phonemes),
     speech: validDisplayValue(canonical.speech) || char,
   };
 }
@@ -373,17 +499,12 @@ function letterSpeech(letter) {
   return letterDisplay(letter).speech;
 }
 
+function letterIpa(letter) {
+  return letterDisplay(letter).ipa;
+}
+
 function speechPromptFor(letter) {
-  const speech = letterSpeech(letter);
-  if (!speech) return "";
-
-  const isIsolatedLetter =
-    letter.family === "Vowel" || isBaseConsonant(letter);
-  if (!isIsolatedLetter) return speech;
-
-  // Chrome voices pronounce isolated glyphs more reliably when the sound is
-  // presented as a short Hindi utterance rather than as a single symbol.
-  return `${speech}। ${speech}।`;
+  return letterSpeech(letter);
 }
 
 function synesthesiaOwner(letter) {
@@ -561,6 +682,13 @@ function isBaseConsonant(letter) {
   );
 }
 
+function supportsDerivedMatras(letter) {
+  return (
+    isBaseConsonant(letter) &&
+    !CLUSTER_ONLY_CONSONANT_IDS.has(letter.id)
+  );
+}
+
 function matraCountForProgress(progress) {
   if (progress.correct < 2 || progress.attempts === 0) return 0;
 
@@ -575,7 +703,7 @@ function matraCountForProgress(progress) {
 }
 
 function unlockedMatraCount(letter) {
-  if (!isBaseConsonant(letter)) return 0;
+  if (!supportsDerivedMatras(letter)) return 0;
 
   const progress = progressFor(letter);
   return Math.max(
@@ -589,10 +717,12 @@ function derivedMatraItemsFor(letter) {
   if (count === 0) return [];
 
   const consonantStem = letterRoman(letter).replace(/a$/, "");
+  const ipaStem = letterIpa(letter)?.replace(/\u0259$/, "");
   return DERIVED_MATRAS.slice(0, count).map((matra) => ({
     id: `${letter.id}--matra-${matra.id}`,
     char: `${letterChar(letter)}${matra.sign}`,
     roman: `${consonantStem}${matra.vowel}`,
+    ipa: ipaStem ? `${ipaStem}${matra.ipaVowel}` : "",
     speech: `${letterChar(letter)}${matra.sign}`,
     family: "Consonant mātrā",
     stage: letter.stage,
@@ -603,7 +733,8 @@ function derivedMatraItemsFor(letter) {
 
 function unlockedDerivedMatraItems() {
   return LETTERS.filter(
-    (letter) => isBaseConsonant(letter) && letter.stage <= state.unlockedStage,
+    (letter) =>
+      supportsDerivedMatras(letter) && letter.stage <= state.unlockedStage,
   ).flatMap(derivedMatraItemsFor);
 }
 
@@ -704,7 +835,7 @@ function normalizeTypedAnswer(value) {
     .replace(/(?:\.s|s\.)/g, "ṣ")
     .replace(/(?:m\.|\.m)/g, "ṃ")
     .replace(/(?:h\.|\.h)/g, "ḥ")
-    .replace(/ng/g, "ṅ")
+    .replace(/ṅ/g, "ng")
     .replace(/ny/g, "ñ")
     .replace(/sh/g, "ś");
 }
@@ -772,7 +903,7 @@ function renderTypedAnswer() {
   help.className = "typed-answer-help";
   help.innerHTML =
     "English keyboard: <code>aa</code> → ā, <code>.t</code> → ṭ, " +
-    "<code>ng</code> → ṅ, <code>ny</code> → ñ, <code>sh</code> → ś, " +
+    "<code>ny</code> → ñ, <code>sh</code> → ś, " +
     "<code>.s</code> → ṣ.";
 
   form.append(inputRow, keyRow, help);
@@ -834,6 +965,7 @@ function renderQuestion() {
     "aria-label",
     `Hear ${letterChar(currentLetter)} pronounced`,
   );
+  elements.speechStatus.textContent = "";
   elements.questionFamily.textContent = currentLetter.family;
   elements.feedback.textContent = "";
   elements.feedback.className = "feedback";
@@ -870,7 +1002,7 @@ function completeAnswer(
     progress.streak = 0;
     state.sessionStreak = 0;
   }
-  if (isBaseConsonant(currentLetter)) {
+  if (supportsDerivedMatras(currentLetter)) {
     progress.matraCount = Math.max(
       progress.matraCount,
       matraCountForProgress(progress),
@@ -1021,6 +1153,7 @@ function progressCardModel(letter) {
     id: letter.id,
     glyph: display.char,
     iast: display.roman,
+    ipa: display.ipa,
     speech: display.speech,
     group,
     phoneticFamily,
@@ -1028,7 +1161,6 @@ function progressCardModel(letter) {
     unlocked,
     mastered,
     mastery,
-    blackout: Math.round(blackoutPercent(letter) * 100),
     status,
     attempts: progress.attempts,
     correct: progress.correct,
@@ -1061,10 +1193,15 @@ function makeProgressCard(model) {
   const speakButton = document.createElement("button");
   speakButton.className = "mastery-card__speak";
   speakButton.type = "button";
-  speakButton.disabled = !model.unlocked;
   speakButton.setAttribute(
     "aria-label",
-    `Hear ${model.speech} pronounced`,
+    model.unlocked
+      ? model.ipa
+        ? `Hear ${model.iast}, IPA ${model.ipa}, pronounced`
+        : `Hear ${model.speech} pronounced`
+      : model.ipa
+        ? `Hear locked letter ${model.iast}, IPA ${model.ipa}, pronounced`
+        : `Hear locked letter ${model.speech} pronounced`,
   );
   speakButton.innerHTML = SPEAKER_ICON_SVG;
   speakButton.addEventListener("click", () =>
@@ -1098,7 +1235,7 @@ function makeProgressCard(model) {
   detail.textContent = model.unlocked
     ? `${model.correct} correct from ${model.attempts} ${
         model.attempts === 1 ? "attempt" : "attempts"
-      } · color ${model.blackout}% black`
+      }`
     : `Unlocks with stage ${model.stage}`;
 
   card.append(header, masteryHeader, meter, detail);
@@ -1130,10 +1267,12 @@ function renderProgressGrid() {
   );
 
   const sections = groupNames.map((groupName) => {
-    const section = document.createElement("section");
+    const isMatraGroup = groupName.endsWith(" mātrās");
+    const section = document.createElement(isMatraGroup ? "details" : "section");
     section.className = "mastery-section";
+    if (isMatraGroup) section.classList.add("mastery-section--dropdown");
 
-    const heading = document.createElement("div");
+    const heading = document.createElement(isMatraGroup ? "summary" : "div");
     heading.className = "mastery-section__heading";
 
     const headingCopy = document.createElement("div");
@@ -1141,7 +1280,6 @@ function renderProgressGrid() {
     const firstModel = models.find((model) => model.group === groupName);
     const info = familyInfo(firstModel.phoneticFamily);
     const title = document.createElement("h2");
-    const isMatraGroup = groupName.endsWith(" mātrās");
     title.append(
       makeFamilyTerm(
         firstModel.phoneticFamily,
@@ -1198,7 +1336,9 @@ elements.navButtons.forEach((button) => {
 
 elements.nextButton.addEventListener("click", renderQuestion);
 elements.speakQuestion.addEventListener("click", () => {
-  if (currentLetter) speakHindi(currentLetter, elements.speakQuestion);
+  if (currentLetter) {
+    speakHindi(currentLetter, elements.speakQuestion, { revealIpa: true });
+  }
 });
 
 elements.unlockClose.addEventListener("click", () => {
@@ -1244,7 +1384,7 @@ document.addEventListener("keydown", (event) => {
 if ("speechSynthesis" in window) {
   loadHindiVoice();
   window.speechSynthesis.addEventListener("voiceschanged", loadHindiVoice);
-} else {
+} else if (location.protocol === "file:") {
   elements.speakQuestion.disabled = true;
   elements.speechStatus.textContent =
     "Speech playback is not supported in this browser.";
